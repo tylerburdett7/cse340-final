@@ -1,6 +1,6 @@
-<%- include("layouts/main", { body: `
-  <h1>Welcome to Fred's Marine</h1>
-
-  <p>Database connection test:</p>
-  <pre>${JSON.stringify(data, null, 2)}</pre>
-`}) %>
+<%- include('partials/header') %>
+<main>
+	<%- include('partials/home-content') %>
+  
+</main>
+<%- include('partials/footer') %>
