@@ -28,7 +28,7 @@ const { default: router } = await import("./src/controllers/routes.js");
 
   // Template engine
   app.set("view engine", "ejs");
-  app.set("views", path.join(__dirname, "views"));
+  app.set("views", path.join(__dirname, "src/views"));
 
   // Static files
   app.use(express.static(path.join(__dirname, "public")));
