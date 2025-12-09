@@ -1,0 +1,101 @@
+<%- include('../partials/header') %>
+<main>
+  <h1>Edit Boat Listing</h1>
+
+  <% if (typeof success !== 'undefined') { %>
+    <div class="alert alert-success">
+      <%= success %>
+    </div>
+  <% } %>
+
+  <% if (typeof error !== 'undefined') { %>
+    <div class="alert alert-error">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <div class="edit-boat-container">
+    <div class="edit-form-section">
+      <h2>Boat Details</h2>
+      <form method="POST" action="/admin/update-boat/<%= boat.id %>" class="admin-form">
+        <div class="form-group">
+          <label for="title">Boat Title *</label>
+          <input type="text" id="title" name="title" required value="<%= boat.title %>" placeholder="e.g., Centurion Ri245">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="make">Make</label>
+            <input type="text" id="make" name="make" value="<%= boat.make || '' %>" placeholder="e.g., Centurion">
+          </div>
+
+          <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="model" value="<%= boat.model || '' %>" placeholder="e.g., Ri245">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" value="<%= boat.year || '' %>" min="1900" max="2100">
+          </div>
+
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" value="<%= boat.price || '' %>" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="condition">Condition *</label>
+          <select id="condition" name="condition" required>
+            <option value="">-- Select --</option>
+            <option value="new" <% if (boat.condition === 'new') { %>selected<% } %>>New</option>
+            <option value="used" <% if (boat.condition === 'used') { %>selected<% } %>>Used</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="5" placeholder="Describe the boat, its features, and condition..."><%= boat.description || '' %></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Update Boat</button>
+      </form>
+
+      <a href="/admin" class="btn-back">Back to Admin</a>
+    </div>
+
+    <div class="images-section">
+      <h2>Boat Images</h2>
+      
+      <% if (boat.images && boat.images.length > 0) { %>
+        <div class="images-gallery">
+          <% boat.images.forEach(image => { %>
+            <div class="image-item">
+              <img src="<%= image.image_url %>" alt="Boat image">
+              <button type="button" class="btn-delete-image" data-image-id="<%= image.id %>">Delete</button>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p>No images added yet.</p>
+      <% } %>
+
+      <div class="add-image-form">
+        <h3>Add More Images</h3>
+        <form method="POST" action="/admin/add-image/<%= boat.id %>" class="image-form">
+          <div class="form-group">
+            <label for="image_url_new">Image URL</label>
+            <input type="url" id="image_url_new" name="image_url" placeholder="https://example.com/image.jpg" required>
+          </div>
+          <button type="submit" class="btn-add-image">Add Image</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/edit-boat.js" defer></script>
+</main>
+<%- include('../partials/footer') %>

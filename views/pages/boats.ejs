@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+<main>
+  <h1>Boat Inventory</h1>
+
+  <% if (boats && boats.length > 0) { %>
+    <div class="boats-container">
+      <% boats.forEach((boat, index) => { 
+        const images = boat.images || []; 
+        const hasImages = images.length > 0; 
+        const firstImage = hasImages ? images[0].image_url : null; 
+        const desc = boat.description || ''; 
+        const preview = desc.length > 120 ? desc.slice(0, 120) + '…' : desc; 
+      %>
+        <article 
+          class="boat-card" 
+          data-boat-index="<%= index %>" 
+          data-images='<%- JSON.stringify(images) %>' 
+          data-title="<%- boat.title || `${boat.make || ''} ${boat.model || ''}` %>" 
+          data-year="<%- boat.year ?? '' %>" 
+          data-price="<%- boat.price ?? '' %>" 
+          data-condition="<%- boat.condition ?? '' %>" 
+          data-description="<%- desc %>"
+        >
+          <% if (firstImage) { %>
+            <img class="boat-image" src="<%= firstImage %>" alt="<%- boat.title || 'Boat image' %>">
+          <% } else { %>
+            <div class="boat-image-placeholder">No Image</div>
+          <% } %>
+
+          <div class="boat-details">
+            <div class="boat-info">
+              <h2><%- boat.title || `${boat.make || ''} ${boat.model || ''}` %></h2>
+              <p>
+                <strong>Condition:</strong> <span class="condition <%= boat.condition === 'new' ? 'new' : 'used' %>"><%= boat.condition || 'N/A' %></span>
+                • <strong>Year:</strong> <%= boat.year || 'N/A' %>
+                • <strong>Price:</strong> <%= boat.price ? Number(boat.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : 'N/A' %>
+              </p>
+              <% if (boat.make || boat.model) { %>
+                <p><strong>Make:</strong> <%= boat.make || 'N/A' %> • <strong>Model:</strong> <%= boat.model || 'N/A' %></p>
+              <% } %>
+            </div>
+
+            <p class="description-preview"><%- preview %></p>
+            <% if (desc.length > 120) { %>
+              <button class="read-more-link" type="button" data-action="open-modal" data-boat-index="<%= index %>">Read More</button>
+            <% } %>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+
+    <!-- Modal container (single, reused for all boats) -->
+    <div id="boat-modal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <button class="close" type="button" aria-label="Close">×</button>
+        <div class="modal-images">
+          <div class="images-carousel">
+            <img class="modal-image" src="" alt="Boat image">
+            <button class="carousel-prev" type="button" aria-label="Previous">‹</button>
+            <button class="carousel-next" type="button" aria-label="Next">›</button>
+          </div>
+          <div class="carousel-nav"></div>
+        </div>
+        <div class="modal-info">
+          <h2 class="modal-title"></h2>
+          <p class="modal-meta"></p>
+          <p class="modal-description"></p>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <p>No boats in inventory yet.</p>
+  <% } %>
+
+  <script src="/js/boats.js" defer></script>
+</main>
+<%- include('../partials/footer') %>

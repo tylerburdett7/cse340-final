@@ -82,5 +82,3 @@ export async function deleteBoatImage(imageId) {
   const query = "DELETE FROM boat_images WHERE id = $1";
   await db.query(query, [imageId]);
 }
-
-

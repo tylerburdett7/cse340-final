@@ -19,7 +19,8 @@ if (fs.existsSync(envPath)) {
 
 const { default: express } = await import("express");
 const { default: session } = await import("express-session");
-const { default: router } = await import("./routes/index.js");
+const { default: connectPgSimple } = await import("connect-pg-simple");
+const { default: router } = await import("./src/controllers/routes.js");
 
 (async () => {
   const app = express();
@@ -35,18 +36,34 @@ const { default: router } = await import("./routes/index.js");
   // Parse form data
   app.use(express.urlencoded({ extended: true }));
 
-  // Sessions
+  // Initialize PostgreSQL session store
+  const pgSession = connectPgSimple(session);
   app.use(
     session({
+      store: new pgSession({
+        conString: process.env.DATABASE_URL,
+        tableName: 'session',
+        createTableIfMissing: true,
+      }),
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false, 
-        maxAge: 1000 * 60 * 60 * 24,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
       },
     })
   );
+
+  // Global middleware to set isLoggedIn for UI
+  app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+      res.locals.isLoggedIn = true;
+    }
+    next();
+  });
 
   // Routes
   app.use("/", router);
@@ -55,7 +72,7 @@ const { default: router } = await import("./routes/index.js");
   app.use((err, req, res, next) => {
     console.error(err);
     res.status(err.status || 500);
-    res.render("error", {
+    res.render("pages/error", {
       message: err.message,
       error: err
     });

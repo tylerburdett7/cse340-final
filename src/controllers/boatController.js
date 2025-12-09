@@ -3,7 +3,7 @@ import { getBoatInventory, getBoatById, addBoat, updateBoat, addBoatImage, delet
 export async function getBoatsPage(req, res, next) {
   try {
     const boats = await getBoatInventory();
-    res.render("boats", { boats });
+    res.render("pages/boats", { boats });
   } catch (err) {
     next(err);
   }
@@ -12,7 +12,7 @@ export async function getBoatsPage(req, res, next) {
 export async function getAdminPage(req, res) {
   try {
     const boats = await getBoatInventory();
-    res.render("admin", { boats });
+    res.render("pages/admin", { boats });
   } catch (err) {
     res.render("admin", { boats: [] });
   }
@@ -22,12 +22,12 @@ export async function getEditBoatPage(req, res, next) {
   try {
     const boat = await getBoatById(req.params.id);
     if (!boat) {
-      return res.status(404).render("error", {
+      return res.status(404).render("pages/error", {
         message: "Boat not found",
         error: {}
       });
     }
-    res.render("edit-boat", { boat });
+    res.render("pages/edit-boat", { boat });
   } catch (err) {
     next(err);
   }
@@ -40,7 +40,7 @@ export async function createBoat(req, res, next) {
     
     if (!title || !condition) {
       const boats = await getBoatInventory();
-      return res.status(400).render("admin", {
+      return res.status(400).render("pages/admin", {
         boats,
         error: "Please fill in title and condition"
       });
@@ -53,7 +53,7 @@ export async function createBoat(req, res, next) {
     await addBoat({ title, year, price, make, model, condition, description, image_urls });
     
     const boats = await getBoatInventory();
-    res.status(201).render("admin", {
+    res.status(201).render("pages/admin", {
       boats,
       success: "Boat added successfully!"
     });
@@ -68,7 +68,7 @@ export async function updateBoatDetails(req, res, next) {
     
     if (!title || !condition) {
       const boat = await getBoatById(req.params.id);
-      return res.status(400).render("edit-boat", {
+      return res.status(400).render("pages/edit-boat", {
         boat,
         error: "Please fill in title and condition"
       });
@@ -85,7 +85,7 @@ export async function updateBoatDetails(req, res, next) {
     });
 
     const boat = await getBoatById(req.params.id);
-    res.render("edit-boat", {
+    res.render("pages/edit-boat", {
       boat,
       success: "Boat updated successfully!"
     });
@@ -100,7 +100,7 @@ export async function addImage(req, res, next) {
     
     if (!image_url) {
       const boat = await getBoatById(req.params.id);
-      return res.status(400).render("edit-boat", {
+      return res.status(400).render("pages/edit-boat", {
         boat,
         error: "Please provide an image URL"
       });
@@ -109,7 +109,7 @@ export async function addImage(req, res, next) {
     await addBoatImage(req.params.id, image_url);
     const boat = await getBoatById(req.params.id);
     
-    res.render("edit-boat", {
+    res.render("pages/edit-boat", {
       boat,
       success: "Image added successfully!"
     });
