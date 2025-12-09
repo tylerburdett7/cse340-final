@@ -36,6 +36,9 @@ const { default: router } = await import("./src/controllers/routes.js");
   // Parse form data
   app.use(express.urlencoded({ extended: true }));
 
+  //trust first proxy (for render)
+  app.set('trust proxy', 1);
+
   // Initialize PostgreSQL session store
   const pgSession = connectPgSimple(session);
   app.use(
