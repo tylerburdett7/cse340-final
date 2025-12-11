@@ -119,14 +119,14 @@ created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 
 ## Test Accounts
 
-Use these credentials to test the application (all use password: `test123`):
+Use these credentials to test the application or register a new customer account (all use the password told to use in the project requirements):
 
-| Email | Role | Password |
-|-------|------|----------|
-| admin@fredsmarine.com | Admin | test123 |
-| sales@fredsmarine.com | Sales Rep | test123 |
-| service@fredsmarine.com | Service Manager | test123 |
-| customer@fredsmarine.com | Customer | test123 |
+| Email | Role |
+|-------|------|
+| admin@fredsmarine.com | Admin |
+| sales@fredsmarine.com | Sales Rep |
+| service@fredsmarine.com | Service Manager |
+| customer@fredsmarine.com | Customer |
 
 ## Quick Access
 
