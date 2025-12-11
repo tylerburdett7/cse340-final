@@ -12,9 +12,9 @@ export async function getBoatsPage(req, res, next) {
 export async function getAdminPage(req, res) {
   try {
     const boats = await getBoatInventory();
-    res.render("pages/admin", { boats });
+    res.render("pages/add-listing", { boats });
   } catch (err) {
-    res.render("admin", { boats: [] });
+    res.render("add-listing", { boats: [] });
   }
 }
 
@@ -40,7 +40,7 @@ export async function createBoat(req, res, next) {
     
     if (!title || !condition) {
       const boats = await getBoatInventory();
-      return res.status(400).render("pages/admin", {
+      return res.status(400).render("pages/add-listing", {
         boats,
         error: "Please fill in title and condition"
       });
@@ -53,7 +53,7 @@ export async function createBoat(req, res, next) {
     await addBoat({ title, year, price, make, model, condition, description, image_urls });
     
     const boats = await getBoatInventory();
-    res.status(201).render("pages/admin", {
+    res.status(201).render("pages/add-listing", {
       boats,
       success: "Boat added successfully!"
     });

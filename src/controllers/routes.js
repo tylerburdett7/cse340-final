@@ -51,6 +51,7 @@ router.get("/my-requests", requireLogin, requireRole(['customer']), getMyService
 
 // Admin routes (admin, sales_rep, service_manager only)
 router.get("/admin", requireLogin, requireRole(['admin', 'sales_rep', 'service_manager']), getAdminPage);
+router.get("/add-listing", requireLogin, requireRole(['admin', 'sales_rep']), getAdminPage);
 
 // Sales rep routes (add/edit boats)
 router.get("/admin/edit/:id", requireLogin, requireRole(['admin', 'sales_rep']), getEditBoatPage);
