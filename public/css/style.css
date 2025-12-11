@@ -212,7 +212,7 @@ h1 {
 
 .description-preview {
   margin-top: auto;
-  padding-top: 15px;
+  padding: 15px 20px 0 20px;
   border-top: 1px solid #e0e0e0;
   color: #666;
   font-size: 13px;
@@ -224,9 +224,14 @@ h1 {
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   display: inline-block;
-  margin-top: 8px;
+  margin: 8px 20px 0 20px;
+  font-size: 13px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
 }
 
 .read-more-link:hover {
@@ -903,6 +908,317 @@ footer p {
   
   .admin-form {
     padding: 20px;
+  }
+}
+
+/* Home Page Styles */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  margin-bottom: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.hero-image.active {
+  opacity: 1;
+}
+
+.carousel-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.carousel-btn {
+  background-color: rgba(0, 61, 122, 0.7);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  pointer-events: all;
+}
+
+.carousel-btn:hover {
+  background-color: rgba(0, 61, 122, 0.9);
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+.hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  color: white;
+  text-align: center;
+  z-index: 5;
+}
+
+.hero-content h1 {
+  color: white;
+  font-size: 48px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 30px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background-color: #003d7a;
+  color: white;
+  border-color: #003d7a;
+}
+
+.btn-primary:hover {
+  background-color: #002a57;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 61, 122, 0.3);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Make first button in hero clear too */
+.hero-buttons .btn-primary {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+}
+
+.hero-buttons .btn-primary:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+
+/* About Section */
+.about {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 60px 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.about-content h2 {
+  color: #003d7a;
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.about-content p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.features {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.features li {
+  padding-left: 30px;
+  position: relative;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* CTA Section */
+.cta {
+  background: linear-gradient(135deg, #003d7a 0%, #002a57 100%);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 0 20px 40px;
+}
+
+.cta h2 {
+  color: white;
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.cta p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.95;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-buttons .btn-primary,
+.cta-buttons .btn-secondary {
+  padding: 14px 35px;
+  font-size: 16px;
+}
+
+.cta-buttons .btn-secondary {
+  background-color: white;
+  color: #003d7a;
+  border-color: white;
+}
+
+.cta-buttons .btn-secondary:hover {
+  background-color: #f0f0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    height: 350px;
+  }
+
+  .hero-content h1 {
+    font-size: 32px;
+  }
+
+  .hero-content p {
+    font-size: 16px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .about {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .about-content h2 {
+    font-size: 28px;
+  }
+
+  .cta {
+    padding: 40px 20px;
+  }
+
+  .cta h2 {
+    font-size: 28px;
+  }
+
+  .carousel-btn {
+    padding: 10px 12px;
+    font-size: 18px;
   }
 }
 

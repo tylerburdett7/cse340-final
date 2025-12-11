@@ -1,8 +1,50 @@
 <%- include('../partials/header') %>
 <main>
-  <h1>Welcome to Fred's Marine</h1>
+  <!-- Hero Section with Image Carousel -->
+  <section class="hero">
+    <div class="hero-carousel">
+      <img class="hero-image active" src="/images/DJI_0700-min.jpg" alt="Fred's Marine - Scenic water view">
+      <img class="hero-image" src="/images/DJI_0701-min.jpg" alt="Fred's Marine - Aerial view">
+      <img class="hero-image" src="/images/IMG_5538-min.JPG" alt="Fred's Marine - Boats">
+      <div class="carousel-controls">
+        <button class="carousel-btn prev" aria-label="Previous image">‹</button>
+        <button class="carousel-btn next" aria-label="Next image">›</button>
+      </div>
+      <div class="carousel-dots"></div>
+    </div>
+    <div class="hero-content">
+      <h1>Welcome to Fred's Marine</h1>
+      <p>Your Premier Boat Dealership & Service Center</p>
+      <div class="hero-buttons">
+        <a href="/boats" class="btn-primary">Browse Our Inventory</a>
+        <a href="/service-request" class="btn-secondary">Request Service</a>
+      </div>
+    </div>
+  </section>
 
-  <p>Database connection test:</p>
-  <pre><%= JSON.stringify(data, null, 2) %></pre>
+  <!-- About Section -->
+  <section class="about">
+    <div class="about-content">
+      <h2>About Fred's Marine</h2>
+      <p>Fred's Marine is your trusted partner for quality boats and expert marine services. Whether you're looking for your next boat or need professional maintenance, we've got you covered.</p>
+      <ul class="features">
+        <li><strong>Quality Inventory</strong> - Carefully selected boats for every need</li>
+        <li><strong>Expert Service</strong> - Professional maintenance and repair services</li>
+        <li><strong>Customer First</strong> - Dedicated to your satisfaction</li>
+        <li><strong>Best Prices</strong> - Competitive pricing on boats and services</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2>Ready to Get Started?</h2>
+    <p>Explore our boat inventory or contact us for service requests today</p>
+    <div class="cta-buttons">
+      <a href="/boats" class="btn-primary">View Inventory</a>
+      <a href="/login" class="btn-secondary">Account Login</a>
+    </div>
+  </section>
 </main>
 <%- include('../partials/footer') %>
+<script src="/js/home.js" defer></script>
