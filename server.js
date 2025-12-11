@@ -77,13 +77,28 @@ const { default: flashMessages } = await import("./src/middleware/flash.js");
   // Routes
   app.use("/", router);
 
+  // 404 Not Found handler
+  app.use((req, res) => {
+    const err = new Error('Page not found');
+    err.status = 404;
+    res.status(404).render('pages/error', {
+      message: 'Page not found',
+      status: 404,
+      error: process.env.NODE_ENV === 'production' ? {} : err
+    });
+  });
+
   // Global error handler
   app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const isDev = process.env.NODE_ENV !== 'production';
+    
     console.error(err);
-    res.status(err.status || 500);
-    res.render("pages/error", {
-      message: err.message,
-      error: err
+    
+    res.status(status).render('pages/error', {
+      message: err.message || 'Something went wrong',
+      status: status,
+      error: isDev ? err : {}
     });
   });
 

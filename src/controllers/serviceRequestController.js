@@ -1,6 +1,5 @@
 import { body, validationResult } from 'express-validator';
 import { getAllServiceRequests, getCustomerServiceRequests, getServiceRequestById, createServiceRequest, updateServiceRequestStatus } from '../models/serviceRequestModel.js';
-import { getBoatInventory } from '../models/boatModel.js';
 
 /**
  * Validation for service request form
@@ -94,10 +93,9 @@ export async function getServiceRequestDetail(req, res, next) {
     const request = await getServiceRequestById(req.params.id);
     
     if (!request) {
-      return res.status(404).render('pages/error', {
-        message: 'Service request not found',
-        error: {},
-      });
+      const err = new Error('Service request not found');
+      err.status = 404;
+      return next(err);
     }
 
     res.render('pages/service-request-detail', {

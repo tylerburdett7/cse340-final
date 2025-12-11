@@ -79,10 +79,9 @@ router.get("/admin/edit/:id", requireLogin, requireRole(['admin', 'sales_rep']),
   try {
     const boat = await getBoatById(req.params.id);
     if (!boat) {
-      return res.status(404).render("pages/error", {
-        message: "Boat not found",
-        error: {}
-      });
+      const err = new Error('Boat not found');
+      err.status = 404;
+      return next(err);
     }
     res.render("pages/edit-boat", { boat });
   } catch (err) {
