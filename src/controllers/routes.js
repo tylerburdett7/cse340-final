@@ -1,16 +1,12 @@
 import express from "express";
-import { getHomePage } from "./homeController.js";
 import {
-  getBoatsPage,
-  getAdminPage,
-  getEditBoatPage,
   createBoat,
   updateBoatDetails,
   addImage,
   deleteImage
 } from "./boatController.js";
+import { getBoatInventory, getBoatById } from "../models/boatModel.js";
 import {
-  showServiceRequestForm,
   submitServiceRequest,
   getMyServiceRequests,
   getAllRequests,
@@ -20,8 +16,6 @@ import {
 } from "./serviceRequestController.js";
 import { requireLogin, requireRole } from "../middleware/auth.js";
 import {
-  showLoginForm,
-  showRegisterForm,
   processLogin,
   processRegister,
   processLogout,
@@ -32,29 +26,69 @@ import {
 const router = express.Router();
 
 // Home
-router.get("/", getHomePage);
+router.get("/", async (req, res, next) => {
+  try {
+    res.render("pages/home");
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Boats
-router.get("/boats", getBoatsPage);
+router.get("/boats", async (req, res, next) => {
+  try {
+    const boats = await getBoatInventory();
+    res.render("pages/boats", { boats });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Authentication routes
-router.get("/login", showLoginForm);
+router.get("/login", (req, res) => res.render('auth/login'));
 router.post("/login", loginValidation, processLogin);
-router.get("/register", showRegisterForm);
+router.get("/register", (req, res) => res.render('auth/register'));
 router.post("/register", registerValidation, processRegister);
 router.get("/logout", processLogout);
 
 // Service request routes (customer only)
-router.get("/service-request", requireLogin, requireRole(['customer']), showServiceRequestForm);
+router.get("/service-request", requireLogin, requireRole(['customer']), (req, res) => res.render('pages/service-request'));
 router.post("/service-request", requireLogin, requireRole(['customer']), serviceRequestValidation, submitServiceRequest);
 router.get("/my-requests", requireLogin, requireRole(['customer']), getMyServiceRequests);
 
 // Admin routes (admin, sales_rep, service_manager only)
-router.get("/admin", requireLogin, requireRole(['admin', 'sales_rep', 'service_manager']), getAdminPage);
-router.get("/add-listing", requireLogin, requireRole(['admin', 'sales_rep']), getAdminPage);
+router.get("/admin", requireLogin, requireRole(['admin', 'sales_rep', 'service_manager']), async (req, res, next) => {
+  try {
+    const boats = await getBoatInventory();
+    res.render("pages/add-listing", { boats });
+  } catch (err) {
+    next(err);
+  }
+});
+router.get("/add-listing", requireLogin, requireRole(['admin', 'sales_rep']), async (req, res, next) => {
+  try {
+    const boats = await getBoatInventory();
+    res.render("pages/add-listing", { boats });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Sales rep routes (add/edit boats)
-router.get("/admin/edit/:id", requireLogin, requireRole(['admin', 'sales_rep']), getEditBoatPage);
+router.get("/admin/edit/:id", requireLogin, requireRole(['admin', 'sales_rep']), async (req, res, next) => {
+  try {
+    const boat = await getBoatById(req.params.id);
+    if (!boat) {
+      return res.status(404).render("pages/error", {
+        message: "Boat not found",
+        error: {}
+      });
+    }
+    res.render("pages/edit-boat", { boat });
+  } catch (err) {
+    next(err);
+  }
+});
 router.post("/admin/add-boat", requireLogin, requireRole(['admin', 'sales_rep']), createBoat);
 router.post("/admin/update-boat/:id", requireLogin, requireRole(['admin', 'sales_rep']), updateBoatDetails);
 router.post("/admin/add-image/:id", requireLogin, requireRole(['admin', 'sales_rep']), addImage);

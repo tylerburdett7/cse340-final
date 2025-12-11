@@ -33,28 +33,6 @@ const registerValidation = [
 ];
 
 /**
- * Display the login form
- */
-const showLoginForm = (req, res) => {
-  res.render('auth/login', {
-    title: 'Admin Login',
-    error: null,
-    errors: [],
-  });
-};
-
-/**
- * Display the registration form
- */
-const showRegisterForm = (req, res) => {
-  res.render('auth/register', {
-    title: 'Create Account',
-    error: null,
-    errors: [],
-  });
-};
-
-/**
  * Process registration form submission
  */
 const processRegister = async (req, res) => {
@@ -105,10 +83,8 @@ const processLogin = async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).render('auth/login', {
-      title: 'Admin Login',
-      errors: errors.array(),
-    });
+    req.session.errors = errors.array();
+    return res.redirect('/login');
   }
 
   const { email, password } = req.body;
@@ -117,20 +93,16 @@ const processLogin = async (req, res) => {
   const user = await findUserByEmail(email);
   if (!user) {
     console.log('User not found:', email);
-    return res.status(401).render('auth/login', {
-      title: 'Admin Login',
-      error: 'Invalid email or password',
-    });
+    req.session.error = 'User not found';
+    return res.redirect('/login');
   }
 
   // Verify password
   const passwordMatch = await verifyPassword(password, user.password);
   if (!passwordMatch) {
     console.log('Invalid password for user:', email);
-    return res.status(401).render('auth/login', {
-      title: 'Admin Login',
-      error: 'Invalid email or password',
-    });
+    req.session.error = 'User not found';
+    return res.redirect('/login');
   }
 
   // Security: Remove password from user object before storing in session
@@ -167,8 +139,6 @@ const processLogout = (req, res) => {
 };
 
 export {
-  showLoginForm,
-  showRegisterForm,
   processLogin,
   processRegister,
   processLogout,

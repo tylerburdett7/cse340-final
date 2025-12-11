@@ -21,6 +21,7 @@ const { default: express } = await import("express");
 const { default: session } = await import("express-session");
 const { default: connectPgSimple } = await import("connect-pg-simple");
 const { default: router } = await import("./src/controllers/routes.js");
+const { default: flashMessages } = await import("./src/middleware/flash.js");
 
 (async () => {
   const app = express();
@@ -69,6 +70,9 @@ const { default: router } = await import("./src/controllers/routes.js");
     }
     next();
   });
+
+  // Flash messages middleware
+  app.use(flashMessages);
 
   // Routes
   app.use("/", router);

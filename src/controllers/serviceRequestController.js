@@ -20,20 +20,6 @@ export const serviceRequestValidation = [
 ];
 
 /**
- * Show the service request form (customer)
- */
-export async function showServiceRequestForm(req, res, next) {
-  try {
-    res.render('pages/service-request', {
-      error: null,
-      errors: [],
-    });
-  } catch (err) {
-    next(err);
-  }
-}
-
-/**
  * Create a new service request (customer)
  */
 export async function submitServiceRequest(req, res, next) {
@@ -61,7 +47,8 @@ export async function submitServiceRequest(req, res, next) {
       });
     }
 
-    res.redirect(`/my-requests?success=Service request submitted successfully!`);
+    req.session.success = 'Service request submitted successfully!';
+    res.redirect('/my-requests');
   } catch (err) {
     next(err);
   }
@@ -77,7 +64,6 @@ export async function getMyServiceRequests(req, res, next) {
 
     res.render('pages/my-requests', {
       requests,
-      success: req.query.success || null,
       error: null,
       errors: [],
     });
@@ -149,7 +135,8 @@ export async function updateRequest(req, res, next) {
       });
     }
 
-    res.redirect(`/admin/service-requests?success=Request updated successfully!`);
+    req.session.success = 'Request updated successfully!';
+    res.redirect('/admin/service-requests');
   } catch (err) {
     next(err);
   }

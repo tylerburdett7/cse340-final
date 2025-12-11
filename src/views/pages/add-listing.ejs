@@ -2,13 +2,13 @@
 <main>
   <h1>Boat Admin Panel</h1>
 
-  <% if (typeof success !== 'undefined') { %>
+  <% if (success) { %>
     <div class="alert alert-success">
       <%= success %>
     </div>
   <% } %>
 
-  <% if (typeof error !== 'undefined') { %>
+  <% if (error) { %>
     <div class="alert alert-error">
       <%= error %>
     </div>
