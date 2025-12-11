@@ -1,5 +1,5 @@
 import { body, validationResult } from 'express-validator';
-import { findUserByEmail, verifyPassword } from '../models/loginModel.js';
+import { findUserByEmail, createUser, verifyPassword } from '../models/loginModel.js';
 
 /**
  * Validation rules for login form
@@ -16,6 +16,23 @@ const loginValidation = [
 ];
 
 /**
+ * Validation rules for registration form
+ */
+const registerValidation = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Please provide a valid email address')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters'),
+  body('confirmPassword')
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage('Passwords do not match'),
+];
+
+/**
  * Display the login form
  */
 const showLoginForm = (req, res) => {
@@ -24,6 +41,61 @@ const showLoginForm = (req, res) => {
     error: null,
     errors: [],
   });
+};
+
+/**
+ * Display the registration form
+ */
+const showRegisterForm = (req, res) => {
+  res.render('auth/register', {
+    title: 'Create Account',
+    error: null,
+    errors: [],
+  });
+};
+
+/**
+ * Process registration form submission
+ */
+const processRegister = async (req, res) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render('auth/register', {
+      title: 'Create Account',
+      errors: errors.array(),
+    });
+  }
+
+  const { email, password } = req.body;
+
+  // Check if user already exists
+  const existingUser = await findUserByEmail(email);
+  if (existingUser) {
+    return res.status(400).render('auth/register', {
+      title: 'Create Account',
+      error: 'Email address is already in use',
+    });
+  }
+
+  // Create new user as customer
+  const newUser = await createUser(email, password, 'customer');
+  if (!newUser) {
+    return res.status(500).render('auth/register', {
+      title: 'Create Account',
+      error: 'Error creating account. Please try again.',
+    });
+  }
+
+  // Log them in automatically
+  req.session.user = {
+    id: newUser.id,
+    email: newUser.email,
+    role: newUser.role,
+    created_at: newUser.created_at,
+  };
+
+  res.redirect('/');
 };
 
 /**
@@ -94,12 +166,12 @@ const processLogout = (req, res) => {
   });
 };
 
-/**
- * Display protected dashboard (requires login)
- */
 export {
   showLoginForm,
+  showRegisterForm,
   processLogin,
+  processRegister,
   processLogout,
   loginValidation,
+  registerValidation,
 };

@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+<main>
+  <h1>Service Request #<%= request.id %></h1>
+
+  <% if (error) { %>
+    <div class="alert alert-error">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <div style="max-width: 800px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+      <h2 style="color: #003d7a; margin-bottom: 15px;"><%= Array.isArray(request.service_types) ? request.service_types.join(', ') : request.service_types %></h2>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 14px;">
+        <div>
+          <strong style="color: #003d7a;">Customer Email:</strong>
+          <p><%= request.customer_email %></p>
+        </div>
+        <div>
+          <strong style="color: #003d7a;">Boat:</strong>
+          <p><%= request.boat_year %> <%= request.boat_make %> <%= request.boat_model %></p>
+        </div>
+        <div>
+          <strong style="color: #003d7a;">Status:</strong>
+          <p><span class="status-badge <% if (request.status === 'approved') { %>approved<% } else if (request.status === 'denied') { %>denied<% } else if (request.status === 'completed') { %>completed<% } else { %>submitted<% } %>"><%= request.status.charAt(0).toUpperCase() + request.status.slice(1) %></span></p>
+        </div>
+        <div>
+          <strong style="color: #003d7a;">Submitted:</strong>
+          <p><%= new Date(request.created_at).toLocaleDateString() %></p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 25px;">
+      <h3 style="color: #003d7a; margin-bottom: 10px;">Description</h3>
+      <p><%= request.description %></p>
+    </div>
+
+    <% if (request.response_notes) { %>
+      <div style="margin-bottom: 25px; background-color: #f9f9f9; padding: 15px; border-radius: 4px; border-left: 4px solid #003d7a;">
+        <h3 style="color: #003d7a; margin-bottom: 10px;">Response Notes</h3>
+        <p><%= request.response_notes %></p>
+      </div>
+    <% } %>
+
+    <% if (request.status === 'submitted') { %>
+      <div style="background-color: #f5f5f5; padding: 25px; border-radius: 8px;">
+        <h3 style="color: #003d7a; margin-bottom: 20px;">Approve or Deny Request</h3>
+        <form method="POST" action="/admin/service-request/<%= request.id %>">
+          <div class="form-group">
+            <label for="status">Decision *</label>
+            <select id="status" name="status" required>
+              <option value="">-- Select --</option>
+              <option value="approved">Approve</option>
+              <option value="denied">Deny</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="response_notes">Response Notes (Optional)</label>
+            <textarea 
+              id="response_notes" 
+              name="response_notes" 
+              rows="5"
+              placeholder="Add any notes for the customer about your decision..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Submit Decision</button>
+          <a href="/admin/service-requests" class="btn-back" style="display: inline-block; margin-left: 10px;">Cancel</a>
+        </form>
+      </div>
+    <% } else { %>
+      <div style="text-align: center;">
+        <a href="/admin/service-requests" class="btn-back">Back to Requests</a>
+      </div>
+    <% } %>
+  </div>
+</main>
+<%- include('../partials/footer') %>

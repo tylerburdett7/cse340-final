@@ -9,12 +9,33 @@ import bcrypt from 'bcrypt';
 const findUserByEmail = async (email) => {
   try {
     const result = await db.query(
-      'SELECT id, email, password, created_at FROM admin_users WHERE LOWER(email) = LOWER($1) LIMIT 1',
+      'SELECT id, email, password, role, created_at FROM users WHERE LOWER(email) = LOWER($1) LIMIT 1',
       [email]
     );
     return result.rows[0] || null;
   } catch (error) {
     console.error('DB Error in findUserByEmail:', error);
+    return null;
+  }
+};
+
+/**
+ * Create a new user account
+ * @param {string} email - User email
+ * @param {string} password - Plain text password to hash
+ * @param {string} role - User role (defaults to 'customer')
+ * @returns {Promise<Object|null>} Created user object or null on error
+ */
+const createUser = async (email, password, role = 'customer') => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await db.query(
+      'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id, email, role, created_at',
+      [email, hashedPassword, role]
+    );
+    return result.rows[0] || null;
+  } catch (error) {
+    console.error('DB Error in createUser:', error);
     return null;
   }
 };
@@ -34,4 +55,4 @@ const verifyPassword = async (plainPassword, hashedPassword) => {
   }
 };
 
-export { findUserByEmail, verifyPassword };
+export { findUserByEmail, createUser, verifyPassword };

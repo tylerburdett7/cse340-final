@@ -62,8 +62,10 @@ const { default: router } = await import("./src/controllers/routes.js");
   // Global middleware to set isLoggedIn for UI
   app.use((req, res, next) => {
     res.locals.isLoggedIn = false;
+    res.locals.userRole = null;
     if (req.session && req.session.user) {
       res.locals.isLoggedIn = true;
+      res.locals.userRole = req.session.user.role;
     }
     next();
   });

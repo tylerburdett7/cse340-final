@@ -7,10 +7,20 @@
     <a href="/">Home</a>
     <a href="/boats">Boat Inventory</a>
     <% if (isLoggedIn) { %>
-      <a href="/admin">Admin</a>
+      <% if (userRole === 'customer') { %>
+        <a href="/service-request">Request Service</a>
+        <a href="/my-requests">My Requests</a>
+      <% } %>
+      <% if (userRole === 'admin' || userRole === 'sales_rep') { %>
+        <a href="/admin">Sales</a>
+      <% } %>
+      <% if (userRole === 'admin' || userRole === 'service_manager') { %>
+        <a href="/admin/service-requests">Service Requests</a>
+      <% } %>
       <a href="/logout">Logout</a>
     <% } else { %>
       <a href="/login">Login</a>
+      <a href="/register">Register</a>
     <% } %>
   </nav>
 </header>

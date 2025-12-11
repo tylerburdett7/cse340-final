@@ -2,7 +2,7 @@
 <main>
   <div class="login-container">
     <h1><%= title %></h1>
-    <p>Enter your email and password to access your account.</p>
+    <p>Create a new account to submit service requests and view your requests.</p>
 
     <% if (error) { %>
       <div class="auth-message error">
@@ -18,7 +18,7 @@
       </div>
     <% } %>
 
-    <form method="POST" action="/login" class="login-form">
+    <form method="POST" action="/register" class="login-form">
       <div class="form-group">
         <label for="email">Email Address</label>
         <input
@@ -38,16 +38,28 @@
           id="password"
           name="password"
           required
-          placeholder="Enter your password"
-          autocomplete="current-password"
+          placeholder="Enter a password (at least 8 characters)"
+          autocomplete="new-password"
         >
       </div>
 
-      <button type="submit" class="btn-login">Sign In</button>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+          placeholder="Confirm your password"
+          autocomplete="new-password"
+        >
+      </div>
+
+      <button type="submit" class="btn-login">Create Account</button>
     </form>
 
     <p style="text-align: center; margin-top: 20px;">
-      Don't have an account? <a href="/register">Create one here</a>
+      Already have an account? <a href="/login">Sign in here</a>
     </p>
   </div>
 </main>

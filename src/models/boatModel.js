@@ -2,16 +2,31 @@ import db from "../db/index.js";
 
 export async function getBoatInventory() {
   try {
-    const result = await db.query(`
-      SELECT b.*, 
-             json_agg(json_build_object('id', i.id, 'image_url', i.image_url) ORDER BY i.id) 
-             FILTER (WHERE i.id IS NOT NULL) as images
-      FROM boats b
-      LEFT JOIN boat_images i ON b.id = i.boat_id
-      GROUP BY b.id
-      ORDER BY b.id
+    const boatsResult = await db.query(`
+      SELECT * FROM boats ORDER BY id
     `);
-    return result.rows;
+    
+    // Get all images
+    const imagesResult = await db.query(`
+      SELECT id, boat_id, image_url FROM boat_images ORDER BY boat_id, id
+    `);
+    
+    // Build a map of boat_id -> images
+    const imagesMap = {};
+    imagesResult.rows.forEach(img => {
+      if (!imagesMap[img.boat_id]) {
+        imagesMap[img.boat_id] = [];
+      }
+      imagesMap[img.boat_id].push({ id: img.id, image_url: img.image_url });
+    });
+    
+    // Add images to each boat
+    const boats = boatsResult.rows.map(boat => ({
+      ...boat,
+      images: imagesMap[boat.id] || []
+    }));
+    
+    return boats;
   } catch (err) {
     if (err.code === "42P01") {
       return [];
@@ -21,17 +36,28 @@ export async function getBoatInventory() {
 }
 
 export async function getBoatById(id) {
-  const query = `
-    SELECT b.*, 
-           json_agg(json_build_object('id', i.id, 'image_url', i.image_url) ORDER BY i.id) 
-           FILTER (WHERE i.id IS NOT NULL) as images
-    FROM boats b
-    LEFT JOIN boat_images i ON b.id = i.boat_id
-    WHERE b.id = $1
-    GROUP BY b.id
-  `;
-  const result = await db.query(query, [id]);
-  return result.rows[0] || null;
+  try {
+    const boatResult = await db.query(`
+      SELECT * FROM boats WHERE id = $1
+    `, [id]);
+    
+    if (!boatResult.rows[0]) {
+      return null;
+    }
+    
+    const boat = boatResult.rows[0];
+    
+    // Get images for this boat
+    const imagesResult = await db.query(`
+      SELECT id, image_url FROM boat_images WHERE boat_id = $1 ORDER BY id
+    `, [id]);
+    
+    boat.images = imagesResult.rows;
+    return boat;
+  } catch (err) {
+    console.error('Error fetching boat:', err);
+    return null;
+  }
 }
 
 export async function addBoat({ title, year, price, make, model, condition, description, image_urls }) {

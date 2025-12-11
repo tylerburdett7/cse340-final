@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+<main>
+  <h1>Request Service</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-error">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <% if (errors && errors.length > 0) { %>
+    <div class="alert alert-error">
+      <% errors.forEach(err => { %>
+        <p><%= err.msg %></p>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <div style="max-width: 600px; margin: 0 auto;">
+    <p>Submit a service request for your boat. A service manager will review your request and respond within 24 hours.</p>
+
+    <form method="POST" action="/service-request" class="admin-form">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label for="boat_year">Boat Year *</label>
+          <input type="text" id="boat_year" name="boat_year" required placeholder="e.g., 2020">
+        </div>
+        <div class="form-group">
+          <label for="boat_make">Boat Make *</label>
+          <input type="text" id="boat_make" name="boat_make" required placeholder="e.g., Sea Ray">
+        </div>
+        <div class="form-group">
+          <label for="boat_model">Boat Model *</label>
+          <input type="text" id="boat_model" name="boat_model" required placeholder="e.g., Sundancer">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Service Types * (select one or more)</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="oil_change" name="service_types" value="oil change">
+            <label for="oil_change">Oil Change</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="impeller_change" name="service_types" value="impeller change">
+            <label for="impeller_change">Impeller Change</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="winterize" name="service_types" value="winterize">
+            <label for="winterize">Winterize</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="inspection" name="service_types" value="inspection">
+            <label for="inspection">Inspection</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="6" 
+          required
+          placeholder="Please describe the service you need, including any relevant details about your boat..."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Submit Service Request</button>
+    </form>
+
+    <a href="/" class="btn-back" style="display: inline-block; margin-top: 15px;">Cancel</a>
+  </div>
+</main>
+<%- include('../partials/footer') %>
