@@ -34,8 +34,7 @@ function requireRole(allowedRoles) {
     } else {
       // User is logged in but doesn't have permission
       res.status(403).render('pages/error', {
-        message: 'Access Denied',
-        error: { message: 'You do not have permission to access this page.' }
+        message: 'You do not have permission to access this page.'
       });
     }
   };
