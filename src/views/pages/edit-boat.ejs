@@ -64,7 +64,12 @@
         <button type="submit" class="btn-submit">Update Boat</button>
       </form>
 
-      <a href="/admin" class="btn-back">Back to Admin</a>
+      <div class="button-group">
+        <a href="/admin" class="btn-back">Back to Sales</a>
+        <form method="POST" action="/admin/delete-boat/<%= boat.id %>" class="delete-form">
+          <button type="submit" class="btn-delete">Delete Listing</button>
+        </form>
+      </div>
     </div>
 
     <div class="images-section">

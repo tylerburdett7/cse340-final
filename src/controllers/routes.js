@@ -3,7 +3,8 @@ import {
   createBoat,
   updateBoatDetails,
   addImage,
-  deleteImage
+  deleteImage,
+  removeListing
 } from "./boatController.js";
 import { getBoatInventory, getBoatById } from "../models/boatModel.js";
 import {
@@ -92,6 +93,7 @@ router.post("/admin/add-boat", requireLogin, requireRole(['admin', 'sales_rep'])
 router.post("/admin/update-boat/:id", requireLogin, requireRole(['admin', 'sales_rep']), updateBoatDetails);
 router.post("/admin/add-image/:id", requireLogin, requireRole(['admin', 'sales_rep']), addImage);
 router.post("/admin/delete-image/:imageId", requireLogin, requireRole(['admin', 'sales_rep']), deleteImage);
+router.post("/admin/delete-boat/:id", requireLogin, requireRole(['admin', 'sales_rep']), removeListing);
 
 // Service manager routes (view and manage service requests)
 router.get("/admin/service-requests", requireLogin, requireRole(['admin', 'service_manager']), getAllRequests);

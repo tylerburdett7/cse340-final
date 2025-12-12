@@ -1,4 +1,4 @@
-import { getBoatInventory, getBoatById, addBoat, updateBoat, addBoatImage, deleteBoatImage } from "../models/boatModel.js";
+import { getBoatInventory, getBoatById, addBoat, updateBoat, addBoatImage, deleteBoatImage, deleteBoat } from "../models/boatModel.js";
 
 export async function createBoat(req, res, next) {
   try {
@@ -73,5 +73,15 @@ export async function deleteImage(req, res, next) {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete image" });
+  }
+}
+
+export async function removeListing(req, res, next) {
+  try {
+    await deleteBoat(req.params.id);
+    req.session.success = 'Boat listing deleted successfully!';
+    res.redirect('/add-listing');
+  } catch (err) {
+    next(err);
   }
 }
