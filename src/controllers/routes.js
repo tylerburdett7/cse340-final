@@ -13,6 +13,7 @@ import {
   getAllRequests,
   getServiceRequestDetail,
   updateRequest,
+  deleteRequest,
   serviceRequestValidation,
 } from "./serviceRequestController.js";
 import { requireLogin, requireRole } from "../middleware/auth.js";
@@ -99,5 +100,6 @@ router.post("/admin/delete-boat/:id", requireLogin, requireRole(['admin', 'sales
 router.get("/admin/service-requests", requireLogin, requireRole(['admin', 'service_manager']), getAllRequests);
 router.get("/admin/service-request/:id", requireLogin, requireRole(['admin', 'service_manager']), getServiceRequestDetail);
 router.post("/admin/service-request/:id", requireLogin, requireRole(['admin', 'service_manager']), updateRequest);
+router.post("/admin/delete-service-request/:id", requireLogin, requireRole(['admin', 'service_manager']), deleteRequest);
 
 export default router;

@@ -1,5 +1,5 @@
 import { body, validationResult } from 'express-validator';
-import { getAllServiceRequests, getCustomerServiceRequests, getServiceRequestById, createServiceRequest, updateServiceRequestStatus } from '../models/serviceRequestModel.js';
+import { getAllServiceRequests, getCustomerServiceRequests, getServiceRequestById, createServiceRequest, updateServiceRequestStatus, deleteServiceRequest } from '../models/serviceRequestModel.js';
 
 /**
  * Validation for service request form
@@ -134,6 +134,26 @@ export async function updateRequest(req, res, next) {
     }
 
     req.session.success = 'Request updated successfully!';
+    res.redirect('/admin/service-requests');
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Delete service request (admin/service_manager)
+ */
+export async function deleteRequest(req, res, next) {
+  try {
+    const deleted = await deleteServiceRequest(req.params.id);
+    
+    if (!deleted) {
+      const err = new Error('Error deleting request');
+      err.status = 500;
+      return next(err);
+    }
+
+    req.session.success = 'Service request deleted successfully!';
     res.redirect('/admin/service-requests');
   } catch (err) {
     next(err);

@@ -91,3 +91,18 @@ export async function updateServiceRequestStatus(id, status, responseNotes) {
     return null;
   }
 }
+
+/**
+ * Delete a service request
+ */
+export async function deleteServiceRequest(id) {
+  try {
+    await db.query(`
+      DELETE FROM service_requests WHERE id = $1
+    `, [id]);
+    return true;
+  } catch (err) {
+    console.error('DB Error in deleteServiceRequest:', err);
+    return false;
+  }
+}

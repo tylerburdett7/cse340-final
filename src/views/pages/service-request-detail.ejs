@@ -71,8 +71,11 @@
         </form>
       </div>
     <% } else { %>
-      <div style="text-align: center;">
+      <div style="display: flex; gap: 10px; justify-content: center;">
         <a href="/admin/service-requests" class="btn-back">Back to Requests</a>
+        <form method="POST" action="/admin/delete-service-request/<%= request.id %>" style="display: inline;">
+          <button type="submit" class="btn-delete">Delete Request</button>
+        </form>
       </div>
     <% } %>
   </div>
